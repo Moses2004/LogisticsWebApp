@@ -16,5 +16,7 @@ namespace LogisticsWebApp.Data
 
         public DbSet<Driver> Drivers { get; set; }
 
+        public DbSet<Assistant> Assistants { get; set; }
+
     }
 }

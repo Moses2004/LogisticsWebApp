@@ -1,0 +1,169 @@
+﻿@model LogisticsWebApp.Models.Assistant
+
+@{
+    ViewData["Title"] = "Delete Assistant";
+}
+
+<style>
+    /* General Body and Font - Keep consistent with other pages */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(to right, #ece9e6, #ffffff);
+        color: #34495e;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* Content Container - Consistent with other pages */
+    .content-container {
+        max-width: 800px; /* Adjust width for details/delete view */
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+        text-align: center; /* Center content in delete warning */
+    }
+
+    /* Heading (H1) Styling - Consistent with other pages */
+    h1 {
+        text-align: center;
+        color: #dc3545; /* Use red for a delete warning heading */
+        margin-bottom: 20px;
+        font-size: 2.5em;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 10px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #dc3545; /* Red underline */
+            border-radius: 5px;
+        }
+
+    /* Warning message for deletion */
+    .delete-warning {
+        font-size: 1.2em;
+        color: #6c757d;
+        margin-bottom: 30px;
+    }
+
+    /* Details List Styling - Reused from Details.cshtml */
+    .details-list {
+        margin-top: 30px;
+        background-color: #f9fbfb;
+        padding: 25px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        text-align: left; /* Align text within details list */
+    }
+
+        .details-list dt {
+            font-weight: 600;
+            color: #34495e;
+            padding: 10px 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .details-list dd {
+            padding: 10px 0 10px 15px;
+            margin-bottom: 0;
+            color: #555;
+        }
+
+            .details-list dt:last-of-type,
+            .details-list dd:last-of-type {
+                border-bottom: none;
+            }
+
+    /* Action Buttons Container */
+    .delete-actions {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 20px; /* Space between buttons */
+    }
+
+    /* Action Button Styling */
+    .action-button {
+        display: inline-block;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.05em;
+        transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .delete-confirm-button {
+        background-color: #dc3545; /* Red for deletion */
+        color: white;
+        border: 1px solid #dc3545;
+    }
+
+        .delete-confirm-button:hover {
+            background-color: #c82333; /* Darker red on hover */
+            transform: translateY(-2px);
+        }
+
+    .back-to-list-button {
+        background-color: #6c757d; /* Grey for Cancel/Back */
+        color: white;
+        border: 1px solid #6c757d;
+    }
+
+        .back-to-list-button:hover {
+            background-color: #545b62;
+            transform: translateY(-2px);
+        }
+
+</style>
+
+<div class="content-container">
+    <h1>Delete Assistant</h1>
+
+    <p class="delete-warning">Are you sure you want to delete this Assistant?</p>
+    <p class="delete-warning">This action cannot be undone.</p>
+
+    <div class="details-list">
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Age)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Age)
+            </dd>
+        </dl>
+    </div>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AssistantID" />
+        <div class="delete-actions">
+            <input type="submit" value="Delete" class="action-button delete-confirm-button" />
+            <a asp-action="Index" class="action-button back-to-list-button">Back to List</a>
+        </div>
+    </form>
+</div>

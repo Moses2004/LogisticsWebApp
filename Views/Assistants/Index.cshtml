@@ -1,0 +1,226 @@
+﻿@model IEnumerable<LogisticsWebApp.Models.Assistant>
+
+@{
+    ViewData["Title"] = "Manage Assistants";
+}
+
+<style>
+    /* Inherit general body styling from _Layout.cshtml if available, otherwise include it */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(to right, #ece9e6, #ffffff);
+        color: #34495e;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* Content Container - Consistent with other pages */
+    .content-container {
+        max-width: 1100px; /* Adjust width as needed for table */
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+    }
+
+    /* Page Heading (H1) Styling - Consistent with My Orders page */
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 35px;
+        font-size: 2.8em;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: #3498db;
+            border-radius: 5px;
+        }
+
+    /* Table Styling - Consistent with My Orders page */
+    .assistants-table { /* Changed class name to differentiate */
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .assistants-table thead {
+            background-color: #34495e;
+            color: white;
+        }
+
+        .assistants-table th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .assistants-table tbody tr {
+            background-color: #ffffff;
+            transition: background-color 0.2s ease;
+        }
+
+            .assistants-table tbody tr:nth-child(even) {
+                background-color: #f6f8f9;
+            }
+
+            .assistants-table tbody tr:hover {
+                background-color: #e9f5ff;
+            }
+
+        .assistants-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .assistants-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    /* Create New Button Styling - Consistent with Register New User button */
+    .create-new-button {
+        display: inline-block;
+        padding: 12px 25px;
+        background-color: #3498db; /* Blue */
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1em;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        text-align: center;
+        margin-bottom: 30px; /* Space below button */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border: none;
+        cursor: pointer;
+    }
+
+        .create-new-button:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        .create-new-button i { /* For Font Awesome icon if you use it */
+            margin-right: 8px;
+        }
+
+    /* Action Links Styling - Consistent with My Orders actions (but for managers) */
+    .action-links a {
+        display: inline-block;
+        margin-right: 15px;
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+        .action-links a:last-child {
+            margin-right: 0;
+        }
+
+    .action-links .details-link {
+        color: #3498db;
+        border: 1px solid #3498db;
+    }
+
+        .action-links .details-link:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+    .action-links .edit-link {
+        color: #ffc107; /* Yellow-orange */
+        border: 1px solid #ffc107;
+    }
+
+        .action-links .edit-link:hover {
+            background-color: #ffc107;
+            color: #343a40;
+        }
+
+    .action-links .delete-link {
+        color: #dc3545; /* Red */
+        border: 1px solid #dc3545;
+    }
+
+        .action-links .delete-link:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+</style>
+
+<div class="content-container">
+    <h1>Manage Assistants</h1>
+
+    <p>
+        <a asp-action="Create" class="create-new-button">
+            <i class="fas fa-plus-circle"></i> Register New Assistant
+        </a>
+    </p>
+
+    <table class="assistants-table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Age)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Age)
+                    </td>
+                    <td class="action-links">
+                        <a asp-action="Edit" asp-route-id="@item.AssistantID" class="edit-link">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.AssistantID" class="details-link">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.AssistantID" class="delete-link">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
