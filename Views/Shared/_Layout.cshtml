@@ -1,0 +1,220 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LogisticsWebApp</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts - Inter for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        /* Custom styles for a cleaner look */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex-grow: 1; /* Make main content area expand */
+        }
+
+        .navbar-brand h2 {
+            font-weight: 700; /* Bolder brand text */
+        }
+        /* Ensure nav links are always white inside the dark navbar,
+                           overriding any general 'a' tag styles from site.css or _Layout.cshtml.css */
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important; /* Slightly transparent white for better contrast */
+            transition: color 0.2s ease-in-out;
+        }
+
+            .navbar-dark .navbar-nav .nav-link:hover,
+            .navbar-dark .navbar-nav .nav-link.active {
+                color: #ffffff !important; /* Pure white on hover/active */
+            }
+        /* Adjust _LoginPartial links too if they are within this navbar */
+        .navbar-dark .navbar-nav .form-inline .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+            .navbar-dark .navbar-nav .form-inline .nav-link:hover {
+                color: #ffffff !important;
+            }
+
+
+        .card {
+            border-radius: 1rem; /* More rounded corners for cards */
+            overflow: hidden; /* Ensures images are clipped to rounded corners */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth hover effect */
+        }
+
+            .card:hover {
+                transform: translateY(-5px); /* Lift card slightly on hover */
+                box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important; /* Stronger shadow on hover */
+            }
+
+        .card-img-top {
+            height: 200px; /* Fixed height for consistent image size */
+            object-fit: cover; /* Ensures images cover the area without distortion */
+            /* Add a temporary background to see if the element is there but image is missing */
+            background-color: #f0f0f0; /* Light gray background to show if img element is present */
+            border: 1px dashed red; /* Temporary border to see img element boundary */
+        }
+
+        .btn-outline-danger {
+            border-width: 2px; /* Slightly thicker border for outline buttons */
+            font-weight: 500; /* Medium font weight */
+        }
+
+            .btn-outline-danger:hover {
+                background-color: #dc3545; /* Solid background on hover */
+                color: white; /* White text on hover */
+            }
+
+        .text-danger.fw-bold {
+            color: #dc3545 !important; /* Ensure consistent red color */
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-dark text-white py-3 shadow-lg">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h2 class="mb-0 navbar-brand">🚛 LogisticsWebApp</h2>
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Services" asp-action="Index">Services</a>
+                            </li>
+
+                            @* Conditional Navigation Links based on User Roles *@
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                @* Links for Client Role *@
+                                @if (User.IsInRole("Client"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-controller="Orderlines" asp-action="Create">Create Order</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-controller="Orderlines" asp-action="MyOrders">My Orders</a>
+                                    </li>
+                                }
+
+                                @* Links for Manager Role *@
+                                @if (User.IsInRole("Manager"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="ManagerOrderlines" asp-action="Index">All Orders (M)</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-controller="Orderlines" asp-action="MyOrders">My Orders (M)</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-controller="Lorries" asp-action="Index">Manage Lorries</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" asp-controller="Users" asp-action="Index">Manage Users</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Drivers" asp-action="Index">Manage Drivers</a> @* New Link! *@
+                                    </li>
+                                }
+                            }
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main role="main" class="container py-5">
+        @RenderBody()
+    </main>
+
+    <section class="py-5 bg-white">
+        <div class="container">
+            <h2 class="text-center mb-4 display-4 fw-bold">Services We Provide</h2>
+            <p class="text-center text-muted mb-5 lead">Covered in These Areas</p>
+
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@Url.Content("~/images/international.jpg")" class="card-img-top" alt="International Moves" onerror="this.onerror=null; this.src='https://placehold.co/200x200/cccccc/000000?text=Image+Missing';">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger fw-bold">International Moves</h5>
+                            <p class="card-text text-muted">
+                                From Bangkok to the US or Singapore, we provide seamless international door-to-door relocation for almost any budget.
+                            </p>
+                            <a href="#" class="btn btn-outline-danger">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@Url.Content("~/images/domestic.jpg")" class="card-img-top" alt="Domestic Moves" onerror="this.onerror=null; this.src='https://placehold.co/200x200/cccccc/000000?text=Image+Missing';">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger fw-bold">Domestic Moves</h5>
+                            <p class="card-text text-muted">
+                                We specialize in local and provincial moves within Thailand—Bangkok, Phuket, Chiang Mai, and more.
+                            </p>
+                            <a href="#" class="btn btn-outline-danger">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@Url.Content("~/images/office.jpg")" class="card-img-top" alt="Office Moves" onerror="this.onerror=null; this.src='https://placehold.co/200x200/cccccc/000000?text=Image+Missing';">
+                        <div class="card-body">
+                            <h5 class="card-title text-danger fw-bold">Office Moves</h5>
+                            <p class="card-text text-muted">
+                                We assist companies in relocating office equipment and staff domestically and internationally.
+                            </p>
+                            <a href="#" class="btn btn-outline-danger">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <div class="container">
+            <p class="lead mb-2">&copy; @DateTime.Now.Year - LogisticsWebApp</p>
+            <p class="small text-muted">
+                We specialize in local and intercity house shifting, packing and unpacking services, furniture handling, and storage solutions. Your move, made easy.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

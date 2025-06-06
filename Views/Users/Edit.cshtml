@@ -1,0 +1,147 @@
+﻿@model LogisticsWebApp.Models.EditUserRolesViewModel
+
+@{
+    ViewData["Title"] = "Edit User Roles";
+}
+
+<div class="container mt-4">
+    <h1 class="display-4 text-center mb-5 fw-bold text-dark">
+        <i class="bi bi-person-fill-gear me-3"></i>Edit User Roles
+    </h1>
+
+    <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="card-title mb-0 fw-bold">User Information & Roles</h4>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                <input type="hidden" asp-for="UserId" /> @* Hidden input for the User ID *@
+
+                <div class="mb-3">
+                    <label asp-for="UserName" class="form-label fw-semibold"></label>
+                    <input asp-for="UserName" class="form-control" readonly />
+                    <span asp-validation-for="UserName" class="text-danger small"></span>
+                    <div class="form-text text-muted">Username is usually the same as Email and cannot be changed here.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-semibold"></label>
+                    <input asp-for="Email" class="form-control" readonly />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                    <div class="form-text text-muted">Email cannot be changed here directly.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                </div>
+
+                <h3 class="h5 text-dark fw-bold mb-3 mt-4">Assigned Roles</h3>
+                <div class="row row-cols-1 row-cols-md-2 g-2 mb-4">
+                    @for (int i = 0; i < Model.AllRoles.Count; i++)
+                    {
+                        <div class="col">
+                            <div class="form-check form-switch p-0">
+                                @* Adjusted for custom switch-like checkboxes *@
+                                <input type="hidden" asp-for="AllRoles[i].RoleName" />
+                                <input class="form-check-input me-2" type="checkbox" role="switch" id="roleSwitch_@i" asp-for="AllRoles[i].IsSelected">
+                                <label class="form-check-label user-select-none" for="roleSwitch_@i">@Model.AllRoles[i].RoleName</label>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="d-flex justify-content-start gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4 py-2">
+                        <i class="bi bi-save-fill me-2"></i>Save Changes
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg rounded-pill px-4 py-2">
+                        <i class="bi bi-x-circle-fill me-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <!-- Bootstrap Icons CSS (needed for icons) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+}
+
+<style>
+    /* Custom styles for the Edit User Roles page */
+    .form-control[readonly] {
+        background-color: #e9ecef; /* Lighter background for readonly inputs */
+        opacity: 1; /* Ensure full opacity */
+    }
+
+    .form-check-input[type="checkbox"] {
+        float: none; /* Override default float for better inline display */
+        margin-left: 0;
+        vertical-align: middle; /* Align checkbox vertically with text */
+    }
+
+    .form-check-label {
+        vertical-align: middle;
+        cursor: pointer;
+        font-weight: 500;
+        color: #343a40; /* Darker text for labels */
+    }
+
+    .form-switch .form-check-input {
+        width: 3em; /* Standard switch width */
+        height: 1.5em; /* Standard switch height */
+        margin-right: 0.5rem; /* Space between switch and label */
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%236c757d'/%3e%3c/svg%3e"); /* Default grey circle */
+        border-color: rgba(0, 0, 0, 0.25);
+    }
+
+        .form-switch .form-check-input:checked {
+            background-color: #0d6efd; /* Bootstrap primary color for checked switch */
+            border-color: #0d6efd;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e"); /* White circle when checked */
+        }
+    /* Specific styling for the switches in a grid */
+    .row.g-2 .col .form-check {
+        padding-left: 0; /* Remove default padding from form-check */
+    }
+
+    .row.g-2 .col .form-check-input {
+        margin-left: 0; /* Align switch checkbox to the left */
+    }
+
+    /* Overall button styling consistent with Index page */
+    .btn-primary {
+        background-color: #1b6ec2;
+        border-color: #1861ac;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #135d9d;
+            border-color: #104a80;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    .card-header.bg-primary {
+        background-color: #1b6ec2 !important; /* Ensure Bootstrap primary color */
+    }
+</style>

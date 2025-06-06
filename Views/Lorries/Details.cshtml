@@ -1,0 +1,121 @@
+﻿@model LogisticsWebApp.Models.Lorry
+
+@{
+    ViewData["Title"] = "Lorry Details";
+}
+
+<div class="container mt-4">
+    <h1 class="display-4 text-center mb-5 fw-bold text-dark">
+        <i class="bi bi-truck-flatbed me-3"></i>Lorry Details
+    </h1>
+
+    <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="card-title mb-0 fw-bold">Detailed Information</h4>
+        </div>
+        <div class="card-body p-4">
+            <dl class="row mb-0">
+                @* mb-0 to remove default bottom margin from dl *@
+                <dt class="col-sm-4 fw-semibold text-dark mb-2">
+                    @Html.DisplayNameFor(model => model.LicensePlate)
+                </dt>
+                <dd class="col-sm-8 text-muted mb-2">
+                    @Html.DisplayFor(model => model.LicensePlate)
+                </dd>
+
+                <dt class="col-sm-4 fw-semibold text-dark mb-2">
+                    @Html.DisplayNameFor(model => model.Model)
+                </dt>
+                <dd class="col-sm-8 text-muted mb-2">
+                    @Html.DisplayFor(model => model.Model)
+                </dd>
+
+                <dt class="col-sm-4 fw-semibold text-dark mb-2">
+                    @Html.DisplayNameFor(model => model.CapacityKg)
+                </dt>
+                <dd class="col-sm-8 text-muted mb-2">
+                    @Html.DisplayFor(model => model.CapacityKg) Kg
+                </dd>
+
+                <dt class="col-sm-4 fw-semibold text-dark mb-2">
+                    @Html.DisplayNameFor(model => model.Status)
+                </dt>
+                <dd class="col-sm-8 text-muted mb-2">
+                    @* Display Status with a Bootstrap Badge *@ @* Corrected comment syntax here *@
+                    @{
+                        string statusClass = "bg-secondary"; // Default
+                        switch (Model.Status)
+                        {
+                            case "Available":
+                                statusClass = "bg-success";
+                                break;
+                            case "In Transit":
+                                statusClass = "bg-warning text-dark"; // text-dark for visibility on warning bg
+                                break;
+                            case "Maintenance":
+                                statusClass = "bg-danger";
+                                break;
+                            default:
+                                statusClass = "bg-info text-dark"; // Use info for unknown/other statuses
+                                break;
+                        }
+                    }
+                    <span class="badge @statusClass rounded-pill px-3 py-2">
+                        @Html.DisplayFor(model => model.Status)
+                    </span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-start gap-3 mt-4 mx-auto" style="max-width: 600px;">
+        <a asp-action="Edit" asp-route-id="@Model?.LorryID" class="btn btn-primary btn-lg rounded-pill px-4 py-2">
+            <i class="bi bi-pencil-fill me-2"></i>Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary btn-lg rounded-pill px-4 py-2">
+            <i class="bi bi-arrow-left-circle-fill me-2"></i>Back to List
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Bootstrap Icons CSS (needed for icons) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+}
+
+<style>
+    /* Custom styles for consistency with other Management pages */
+    .btn-primary {
+        background-color: #1b6ec2;
+        border-color: #1861ac;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #135d9d;
+            border-color: #104a80;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    .card-header.bg-primary {
+        background-color: #1b6ec2 !important; /* Ensure Bootstrap primary color */
+    }
+
+    .badge {
+        font-size: 0.85em;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+</style>

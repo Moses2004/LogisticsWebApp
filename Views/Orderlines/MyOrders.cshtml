@@ -1,0 +1,295 @@
+﻿@model IEnumerable<LogisticsWebApp.Models.Orderline>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<style>
+    /* General Body and Font - Keep consistent with Create page */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(to right, #ece9e6, #ffffff);
+        color: #34495e;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* Content Container - Consistent with Create page */
+    .content-container {
+        max-width: 1100px; /* Wider for the table */
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+    }
+
+    /* Page Heading (H1) Styling */
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 35px;
+        font-size: 2.8em; /* Slightly larger than form heading */
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 100px; /* Wider underline for main heading */
+            height: 4px;
+            background-color: #3498db;
+            border-radius: 5px;
+        }
+
+    /* Empty Orders Message */
+    .empty-orders-message {
+        text-align: center;
+        padding: 30px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 1px dashed #ced4da;
+        color: #6c757d;
+        font-size: 1.1em;
+        margin-top: 30px;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+        .empty-orders-message a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+            .empty-orders-message a:hover {
+                color: #2980b9;
+                text-decoration: underline;
+            }
+
+    /* Table Styling */
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse; /* Remove default table borders */
+        margin-top: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Soft shadow for the table */
+        border-radius: 8px; /* Rounded corners for the entire table */
+        overflow: hidden; /* Ensures rounded corners apply to content */
+    }
+
+        .orders-table thead {
+            background-color: #34495e; /* Dark header background */
+            color: white;
+        }
+
+        .orders-table th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .orders-table tbody tr {
+            background-color: #ffffff;
+            transition: background-color 0.2s ease;
+        }
+
+            .orders-table tbody tr:nth-child(even) {
+                background-color: #f6f8f9; /* Light stripe for even rows */
+            }
+
+            .orders-table tbody tr:hover {
+                background-color: #e9f5ff; /* Highlight row on hover */
+            }
+
+        .orders-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0; /* Subtle horizontal line */
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        /* Last row's bottom border */
+        .orders-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    /* Status Badge Styling */
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px; /* Pill shape */
+        font-weight: 600;
+        font-size: 0.85em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white; /* Default text color for badges */
+    }
+
+    /* Specific Status Colors */
+    .status-pending {
+        background-color: #ffc107; /* Yellow for pending */
+        color: #343a40; /* Dark text for yellow */
+    }
+
+    .status-in-transit {
+        background-color: #007bff; /* Blue for in transit */
+    }
+
+    .status-delivered {
+        background-color: #28a745; /* Green for delivered */
+    }
+
+    .status-cancelled {
+        background-color: #dc3545; /* Red for cancelled */
+    }
+
+    .status-processing { /* Example for another status */
+        background-color: #6c757d; /* Grey for processing */
+    }
+
+    /* Action Links Styling - REMOVED AS ACTIONS COLUMN IS REMOVED */
+    /*
+        .action-links a {
+            display: inline-block;
+            margin-right: 15px;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+            .action-links a:last-child {
+                margin-right: 0;
+            }
+
+        .action-links .details-link {
+            color: #3498db;
+            border: 1px solid #3498db;
+        }
+
+            .action-links .details-link:hover {
+                background-color: #3498db;
+                color: white;
+            }
+
+        .action-links .edit-link {
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+            .action-links .edit-link:hover {
+                background-color: #ffc107;
+                color: #343a40;
+            }
+
+        .action-links .delete-link {
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+            .action-links .delete-link:hover {
+                background-color: #dc3545;
+                color: white;
+            }
+        */
+</style>
+
+<div class="content-container">
+    <h1>My Orders</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-orders-message">
+            <p>You currently have no orders. Would you like to <a asp-action="Create">create a new order</a>?</p>
+        </div>
+    }
+    else
+    {
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InitialAddress)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DestinationAddress)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WeightKg)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    @* Removed <th>Actions</th> *@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InitialAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DestinationAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WeightKg)
+                        </td>
+                        <td>
+                            @{
+                                string statusClass = "";
+                                // Map your actual Status values to CSS classes
+                                switch (item.Status)
+                                {
+                                    case "Pending":
+                                        statusClass = "status-pending";
+                                        break;
+                                    case "In Transit": // Or "Shipped" or "Processing"
+                                        statusClass = "status-in-transit";
+                                        break;
+                                    case "Delivered":
+                                        statusClass = "status-delivered";
+                                        break;
+                                    case "Cancelled":
+                                        statusClass = "status-cancelled";
+                                        break;
+                                    default:
+                                        statusClass = "status-processing"; // A default status
+                                        break;
+                                }
+                            }
+                            <span class="status-badge @statusClass">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </span>
+                        </td>
+                        @* Removed the <td> containing action links *@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

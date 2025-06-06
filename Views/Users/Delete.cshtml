@@ -1,0 +1,53 @@
+﻿@model LogisticsWebApp.Models.UserWithRolesViewModel
+
+@{
+    ViewData["Title"] = "Delete User";
+}
+
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Delete User</h1>
+
+<h3 class="text-xl text-red-600 mb-4">Are you sure you want to delete this user? This action cannot be undone.</h3>
+
+<div class="bg-white rounded-xl shadow-lg p-6">
+    <dl class="row">
+        <dt class="col-sm-3 font-semibold text-gray-700">
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd class="col-sm-9 text-gray-800">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class="col-sm-3 font-semibold text-gray-700">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-9 text-gray-800">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-3 font-semibold text-gray-700">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-9 text-gray-800">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-3 font-semibold text-gray-700">
+            Roles
+        </dt>
+        <dd class="col-sm-9 text-gray-800">
+            @if (Model.Roles != null && Model.Roles.Any())
+            {
+                @string.Join(", ", Model.Roles)
+            }
+            else
+            {
+                <span>No Roles</span>
+            }
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" /> @* Hidden input for the User ID to be deleted *@
+        <div class="mt-6 flex space-x-3">
+            <button type="submit" class="inline-block bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300 font-semibold">Delete User</button>
+            <a asp-action="Index" class="inline-block bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 font-semibold">Cancel</a>
+        </div>
+    </form>
+</div>

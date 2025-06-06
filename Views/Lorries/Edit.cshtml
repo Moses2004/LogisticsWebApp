@@ -1,0 +1,96 @@
+﻿@model LogisticsWebApp.Models.Lorry
+
+@{
+    ViewData["Title"] = "Edit Lorry";
+}
+
+<div class="container mt-4">
+    <h1 class="display-4 text-center mb-5 fw-bold text-dark">
+        <i class="bi bi-truck-flatbed me-3"></i>Edit Lorry
+    </h1>
+
+    <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="card-title mb-0 fw-bold">Lorry Details</h4>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                <input type="hidden" asp-for="LorryID" /> @* Hidden input for the primary key *@
+
+                <div class="mb-3">
+                    <label asp-for="LicensePlate" class="form-label fw-semibold"></label>
+                    <input asp-for="LicensePlate" class="form-control" />
+                    <span asp-validation-for="LicensePlate" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Model" class="form-label fw-semibold"></label>
+                    <input asp-for="Model" class="form-control" />
+                    <span asp-validation-for="Model" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CapacityKg" class="form-label fw-semibold"></label>
+                    <input asp-for="CapacityKg" class="form-control" />
+                    <span asp-validation-for="CapacityKg" class="text-danger small"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Status" class="form-label fw-semibold"></label>
+                    <input asp-for="Status" class="form-control" />
+                    <span asp-validation-for="Status" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex justify-content-start gap-3 mt-4">
+                    <button type="submit" value="Save" class="btn btn-primary btn-lg rounded-pill px-4 py-2">
+                        <i class="bi bi-save-fill me-2"></i>Save
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg rounded-pill px-4 py-2">
+                        <i class="bi bi-arrow-left-circle-fill me-2"></i>Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <!-- Bootstrap Icons CSS (needed for icons) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+}
+
+<style>
+    /* Custom styles for consistency with other Management pages */
+    .btn-primary {
+        background-color: #1b6ec2;
+        border-color: #1861ac;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #135d9d;
+            border-color: #104a80;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+    .card-header.bg-primary {
+        background-color: #1b6ec2 !important; /* Ensure Bootstrap primary color */
+    }
+
+    .form-label {
+        font-weight: 600; /* Make labels a bit bolder */
+    }
+</style>
