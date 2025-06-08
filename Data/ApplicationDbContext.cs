@@ -18,5 +18,7 @@ namespace LogisticsWebApp.Data
 
         public DbSet<Assistant> Assistants { get; set; }
 
+        public DbSet<TransportUnit> TransportUnits { get; set; } // Add this line
+
     }
 }
