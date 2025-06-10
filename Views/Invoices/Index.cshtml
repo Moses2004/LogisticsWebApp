@@ -1,0 +1,98 @@
+﻿@model IEnumerable<LogisticsWebApp.Models.Invoice>
+
+@{
+    ViewData["Title"] = "Invoices Overview"; // More descriptive title
+}
+
+<div class="container mt-4">
+    @* Add a container for better spacing *@
+    <h1 class="mb-4 text-primary">Invoice List</h1> @* Bootstrap classes for styling *@
+
+    <p>
+        <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus-circle"></i> Create New Invoice</a> @* Add a button style and icon (requires Font Awesome) *@
+    </p>
+
+    <div class="table-responsive">
+        @* Make table responsive on smaller screens *@
+        <table class="table table-hover table-bordered shadow-sm">
+            @* Add hover effect, borders, and a subtle shadow *@
+            <thead class="bg-primary text-white">
+                @* Blue header with white text *@
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Orderline) @* This will show "Orderline" by default *@
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TransportUnit) @* This will show "TransportUnit" by default *@
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TotalAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentStatus)
+                    </th>
+                    <th class="text-center">Actions</th> @* Center align the Actions header *@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @* Display a more meaningful Orderline identifier.
+                                For example, if Orderline has a CustomerID, InitialAddress, or DestinationAddress.
+                                Adjust "InitialAddress" to the property you want to see. *@
+                            @Html.DisplayFor(modelItem => item.Orderline.InitialAddress) @* Assuming Orderline has InitialAddress *@
+                            <br />
+                            <small class="text-muted">Order ID: @Html.DisplayFor(modelItem => item.OrderlineID)</small> @* Show ID as secondary info *@
+                        </td>
+                        <td>
+                            @* Display a more meaningful TransportUnit identifier.
+                                You chose 'Container' in dropdowns, so display that here. *@
+                            @Html.DisplayFor(modelItem => item.TransportUnit.Container)
+                            <br />
+                            <small class="text-muted">Unit ID: @Html.DisplayFor(modelItem => item.TransportUnitID)</small> @* Show ID as secondary info *@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalAmount)
+                        </td>
+                        <td>
+                            @* Add a badge for PaymentStatus if you have distinct values like "Paid", "Pending" *@
+                            @{
+                                var statusClass = "";
+                                switch (item.PaymentStatus)
+                                {
+                                    case "Paid":
+                                        statusClass = "badge bg-success";
+                                        break;
+                                    case "Pending":
+                                        statusClass = "badge bg-warning text-dark";
+                                        break;
+                                    case "Overdue":
+                                        statusClass = "badge bg-danger";
+                                        break;
+                                    default:
+                                        statusClass = "badge bg-secondary";
+                                        break;
+                                }
+                            }
+                            <span class="@statusClass">@Html.DisplayFor(modelItem => item.PaymentStatus)</span>
+                        </td>
+                        <td class="text-center">
+                            @* Center align action links *@
+                            <div class="btn-group" role="group" aria-label="Invoice Actions">
+                                @* Group buttons *@
+                                <a asp-action="Edit" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-info" title="Edit"><i class="fas fa-edit"></i></a> @* Small info button with icon *@
+                                <a asp-action="Details" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-secondary mx-1" title="Details"><i class="fas fa-info-circle"></i></a> @* Small secondary button with icon *@
+                                <a asp-action="Delete" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash-alt"></i></a> @* Small danger button with icon *@
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div> @* End table-responsive *@
+</div> @* End container *@
+
+@section Scripts {
+    }

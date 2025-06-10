@@ -1,0 +1,102 @@
+﻿@model LogisticsWebApp.Models.Invoice
+
+@{
+    ViewData["Title"] = "Invoice Details"; // More descriptive title
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Invoice Details</h1>
+
+    <hr class="mb-4" />
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            @* Adjust column width for details view *@
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Invoice Information</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        @* Use description list for details *@
+                        <dt class="col-sm-3 text-secondary">
+                            @* Make labels slightly muted *@
+                            @Html.DisplayNameFor(model => model.InvoiceID) @* Display Invoice ID *
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.InvoiceID)
+                        </dd>
+
+                        <dt class="col-sm-3 text-secondary">
+                            @Html.DisplayNameFor(model => model.Orderline)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @* Display a more meaningful Orderline identifier. Adjust property as needed. *@
+                            <strong>@Html.DisplayFor(model => model.Orderline.InitialAddress)</strong> @* Assuming Orderline has InitialAddress property*
+                            <br />
+                            <small class="text-muted">Orderline ID: @Html.DisplayFor(model => model.OrderlineID)</small>
+                            @* Optional: Add more Orderline details if useful *@
+                            @* <br /><small class="text-muted">Customer: @Html.DisplayFor(model => model.Orderline.CustomerID)</small> *@
+                            </dd>
+
+                        <dt class="col-sm-3 text-secondary">
+                                @Html.DisplayNameFor(model => model.TransportUnit)
+                        </dt>
+                        <dd class="col-sm-9">
+                            <strong>@Html.DisplayFor(model => model.TransportUnit.Container)</strong> @* Assuming TransportUnit has Container property*
+                            <br />
+                            <small class="text-muted">Transport Unit ID: @Html.DisplayFor(model => model.TransportUnitID)</small>
+                            @* Optional: Add more TransportUnit details if useful *@
+                                @* <br /><small class="text-muted">Lorry: @Html.DisplayFor(model => model.TransportUnit.Lorry.LicensePlate)</small> *@
+                        </dd>
+
+                        <dt class="col-sm-3 text-secondary">
+                                @Html.DisplayNameFor(model => model.TotalAmount)
+                        </dt>
+                        <dd class="col-sm-9">
+                            <strong>@Html.DisplayFor(model => model.TotalAmount)</strong>
+                        </dd>
+
+                        <dt class="col-sm-3 text-secondary">
+                                @Html.DisplayNameFor(model => model.PaymentStatus)
+                        </dt>
+                        <dd class="col-sm-9">
+                                @{
+                                    var statusClass = "";
+                                    switch (Model.PaymentStatus)
+                                    {
+                                        case "Paid":
+                                            statusClass = "badge bg-success fs-6"; // Increased font size
+                                            break;
+                                        case "Pending":
+                                            statusClass = "badge bg-warning text-dark fs-6";
+                                            break;
+                                        case "Overdue":
+                                            statusClass = "badge bg-danger fs-6";
+                                            break;
+                                        default:
+                                            statusClass = "badge bg-secondary fs-6";
+                                            break;
+                                    }
+                                }
+                            <span class="@statusClass">@Html.DisplayFor(model => model.PaymentStatus)</span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a asp-action="Edit" asp-route-id="@Model?.InvoiceID" class="btn btn-warning me-2">
+            <i class="fas fa-edit"></i> Edit Invoice
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-alt-circle-left"></i> Back to List
+        </a>
+    </div>
+
+</div>
+
+@section Scripts {
+    }

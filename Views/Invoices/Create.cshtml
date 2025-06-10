@@ -1,0 +1,77 @@
+﻿@model LogisticsWebApp.Models.Invoice
+
+@{
+    ViewData["Title"] = "Create New Invoice"; // More descriptive title
+}
+
+<div class="container mt-4">
+    @* Add a container for better spacing *@
+    <h1 class="mb-4 text-primary">Create New Invoice</h1> @* Bootstrap classes for styling *@
+
+    <hr class="mb-4" /> @* Add a separator with margin *@
+
+    <div class="row justify-content-center">
+        @* Center the form column *@
+        <div class="col-md-6">
+            @* Make the form column slightly wider for better layout *@
+            <div class="card shadow-sm">
+                @* Add a card styling with shadow *@
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Invoice Details</h5> @* Card header for section title *@
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div> @* Use 'All' for summary and Bootstrap alert for styling *@
+
+                        <div class="form-group mb-3">
+                            @* Add margin-bottom for spacing *@
+                            <label asp-for="OrderlineID" class="form-label"></label> @* Use form-label for better styling *@
+                            <select asp-for="OrderlineID" class="form-control" asp-items="ViewBag.OrderlineID">
+                                <option value="">-- Select Orderline --</option> @* Add a default option for dropdown *@
+                            </select>
+                            <span asp-validation-for="OrderlineID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="TransportUnitID" class="form-label"></label>
+                            <select asp-for="TransportUnitID" class="form-control" asp-items="ViewBag.TransportUnitID">
+                                <option value="">-- Select Transport Unit --</option> @* Add a default option for dropdown *@
+                            </select>
+                            <span asp-validation-for="TransportUnitID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="TotalAmount" class="form-label"></label>
+                            <input asp-for="TotalAmount" class="form-control" />
+                            <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-4">
+                            @* Add more margin-bottom before the button *@
+                            <label asp-for="PaymentStatus" class="form-label"></label>
+                            <input asp-for="PaymentStatus" class="form-control" />
+                            <span asp-validation-for="PaymentStatus" class="text-danger"></span>
+                        </div>
+                        <div class="d-grid gap-2">
+                            @* Use Bootstrap's d-grid for full-width button *@
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> Create Invoice @* Add icon and larger button *@
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        @* Add margin-top and center the link *@
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-alt-circle-left"></i> Back to List @* Add icon and outline button style *@
+        </a>
+    </div>
+
+</div> @* End container *@
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
