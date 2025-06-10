@@ -1,54 +1,194 @@
 ﻿@model LogisticsWebApp.Models.TransportUnit
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Transport Unit";
 }
 
-<h1>Edit</h1>
+<style>
+    /* Inherit general body styling from _Layout.cshtml if available, otherwise include it */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(to right, #ece9e6, #ffffff);
+        color: #34495e;
+        margin: 0;
+        line-height: 1.6;
+    }
 
-<h4>TransportUnit</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    /* Content Container - Consistent with other pages */
+    .content-container {
+        max-width: 700px; /* Adjust width for forms */
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e0e0e0;
+    }
+
+    /* Form Container - Consistent with other edit pages */
+    .form-container {
+        padding: 20px;
+    }
+
+    /* Heading (H1) Styling - Consistent with other edit pages */
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 35px;
+        font-size: 2.2em;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 10px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #3498db;
+            border-radius: 5px;
+        }
+
+    /* Form Group Styling */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 0.95em;
+        }
+
+    /* Input/Select Field Styling */
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 1em;
+        color: #495057;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        box-sizing: border-box; /* Ensures padding doesn't add to total width */
+    }
+
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25); /* Blue glow on focus */
+            outline: none;
+        }
+
+    /* Validation Message Styling */
+    .text-danger {
+        color: #dc3545; /* Red for errors */
+        font-size: 0.85em;
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* Submit Button Styling - Consistent with Edit/Save button */
+    .submit-button {
+        display: block;
+        width: 100%;
+        padding: 15px 25px;
+        background-color: #007bff; /* Blue for Save/Edit */
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .submit-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+    /* Back to List Link Styling */
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 25px;
+        font-size: 1em;
+    }
+
+        .back-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+            .back-link a:hover {
+                color: #2980b9;
+                text-decoration: underline;
+            }
+</style>
+
+<div class="content-container">
+    <h1>Edit Transport Unit</h1>
+
+    <div class="form-container">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TransportUnitID" />
+            <input type="hidden" asp-for="TransportUnitID" /> @* Keep the hidden ID for editing *@
+
             <div class="form-group">
                 <label asp-for="LorryID" class="control-label"></label>
-                <select asp-for="LorryID" class="form-control" asp-items="ViewBag.LorryID"></select>
+                <select asp-for="LorryID" class="form-control" asp-items="ViewBag.LorryID">
+                    <option value="">-- Select Lorry --</option>
+                </select>
                 <span asp-validation-for="LorryID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DriverID" class="control-label"></label>
-                <select asp-for="DriverID" class="form-control" asp-items="ViewBag.DriverID"></select>
+                <select asp-for="DriverID" class="form-control" asp-items="ViewBag.DriverID">
+                    <option value="">-- Select Driver --</option>
+                </select>
                 <span asp-validation-for="DriverID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AssistantID" class="control-label"></label>
-                <select asp-for="AssistantID" class="form-control" asp-items="ViewBag.AssistantID"></select>
+                <select asp-for="AssistantID" class="form-control" asp-items="ViewBag.AssistantID">
+                    <option value="">-- Select Assistant --</option>
+                </select>
                 <span asp-validation-for="AssistantID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Container" class="control-label"></label>
-                <input asp-for="Container" class="form-control" />
+                <input asp-for="Container" class="form-control" placeholder="e.g., Container A123" />
                 <span asp-validation-for="Container" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <input asp-for="Status" class="form-control" placeholder="e.g., Available" />
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="submit-button" />
             </div>
         </form>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="back-link">
+        <a asp-action="Index">Back to Transport Unit List</a>
+    </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LogisticsWebApp.Data;
 using LogisticsWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LogisticsWebApp.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class TransportUnitsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -50,9 +52,10 @@ namespace LogisticsWebApp.Controllers
         // GET: TransportUnits/Create
         public IActionResult Create()
         {
-            ViewData["AssistantID"] = new SelectList(_context.Assistants, "AssistantID", "Name");
-            ViewData["DriverID"] = new SelectList(_context.Drivers, "DriverID", "Name");
+            // Populate ViewBag with SelectLists for dropdowns
             ViewData["LorryID"] = new SelectList(_context.Lorries, "LorryID", "LicensePlate");
+            ViewData["DriverID"] = new SelectList(_context.Drivers, "DriverID", "Name");
+            ViewData["AssistantID"] = new SelectList(_context.Assistants, "AssistantID", "Name");
             return View();
         }
 
@@ -61,19 +64,31 @@ namespace LogisticsWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TransportUnitID,LorryID,DriverID,AssistantID,Container,Status")] TransportUnit transportUnit)
+        public async Task<IActionResult> Create(
+           // **IMPORTANT: Update the [Bind] attribute below**
+           // Include only the scalar properties and Foreign Key IDs from your TransportUnit model
+           // DO NOT include the navigation properties (e.g., Lorry, Driver, Assistant)
+           [Bind("TransportUnitID,LorryID,DriverID,AssistantID,Container,Status")] TransportUnit transportUnit)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(transportUnit);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); // Redirect to the Index page on success
             }
-            ViewData["AssistantID"] = new SelectList(_context.Assistants, "AssistantID", "Name", transportUnit.AssistantID);
-            ViewData["DriverID"] = new SelectList(_context.Drivers, "DriverID", "Name", transportUnit.DriverID);
+
+            // If ModelState.IsValid is false (validation failed on server-side),
+            // you must re-populate the ViewData for dropdowns before returning the view
+            // so that the dropdowns aren't empty when the form reloads with validation errors.
             ViewData["LorryID"] = new SelectList(_context.Lorries, "LorryID", "LicensePlate", transportUnit.LorryID);
-            return View(transportUnit);
+            ViewData["DriverID"] = new SelectList(_context.Drivers, "DriverID", "Name", transportUnit.DriverID);
+            ViewData["AssistantID"] = new SelectList(_context.Assistants, "AssistantID", "Name", transportUnit.AssistantID);
+            // If "Status" is a dropdown, re-populate it here with the selected value:
+            // ViewData["Status"] = new SelectList(new List<string> { "Available", "In Transit", "Maintenance", "Completed" }, transportUnit.Status);
+
+            return View(transportUnit); // Return the view with the model and validation errors
         }
+
 
         // GET: TransportUnits/Edit/5
         public async Task<IActionResult> Edit(int? id)

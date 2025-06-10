@@ -11,28 +11,28 @@ namespace LogisticsWebApp.Models
 
         // Foreign Key for Lorry
         [Required] // A TransportUnit must have a Lorry
-        public int LorryID { get; set; }
+        public int? LorryID { get; set; }
         [ForeignKey("LorryID")]
-        public Lorry Lorry { get; set; } // Navigation property
+        public Lorry? Lorry { get; set; } // Navigation property
 
         // Foreign Key for Driver
         [Required] // A TransportUnit must have a Driver
         public int DriverID { get; set; }
         [ForeignKey("DriverID")]
-        public Driver Driver { get; set; } // Navigation property
+        public Driver? Driver { get; set; } // Navigation property
 
         // Foreign Key for Assistant (optional as per some diagrams, but let's make it required for now, can change if needed)
         [Required] // A TransportUnit must have an Assistant
         public int AssistantID { get; set; }
         [ForeignKey("AssistantID")]
-        public Assistant Assistant { get; set; } // Navigation property
+        public Assistant? Assistant { get; set; } // Navigation property
 
         [Required]
         [StringLength(100)] // Assuming container ID/description
-        public string Container { get; set; }
+        public string? Container { get; set; }
 
         [Required]
         [StringLength(50)] // e.g., "Available", "In Transit", "Maintenance"
-        public string Status { get; set; }
+        public string? Status { get; set; }
     }
 }
