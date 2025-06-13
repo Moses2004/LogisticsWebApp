@@ -22,5 +22,7 @@ namespace LogisticsWebApp.Data
 
         public DbSet<Invoice> Invoices { get; set; }
 
+        public DbSet<FeedBack> FeedBacks { get; set; }
+
     }
 }
