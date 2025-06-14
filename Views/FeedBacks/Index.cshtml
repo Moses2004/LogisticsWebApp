@@ -1,47 +1,99 @@
 ﻿@model IEnumerable<LogisticsWebApp.Models.FeedBack>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Customer Feedback"; // More descriptive title
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Customer Feedback List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Invoice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Message)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Invoice.PaymentStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FeedbanckID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FeedbanckID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FeedbanckID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p>
+        <a asp-action="Create" class="btn btn-success"><i class="fas fa-comment-dots"></i> Submit New Feedback</a> @* Button style and icon *@
+    </p>
+
+    <div class="table-responsive">
+        @* Make table responsive on smaller screens *@
+        <table class="table table-hover table-bordered shadow-sm">
+            @* Add hover effect, borders, and a subtle shadow *@
+            <thead class="bg-primary text-white">
+                @* Blue header with white text *@
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Invoice)
+                    </th>
+                    <th class="text-center">
+                        @* Center align rating column *@
+                        @Html.DisplayNameFor(model => model.Rating)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Message)
+                    </th>
+                    <th class="text-center">Actions</th> @* Center align the Actions header *@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @* Display a more meaningful Invoice identifier.
+                                For example, if Invoice has TotalAmount or PaymentStatus.
+                                Adjust "TotalAmount" to the property you want to see. *@
+                            <strong>Invoice ID: @Html.DisplayFor(modelItem => item.Invoice.InvoiceID)</strong>
+                            <br />
+                            @if (item.Invoice != null)
+                            {
+                                <small class="text-muted">Total: @Html.DisplayFor(modelItem => item.Invoice.TotalAmount)</small>
+                                <br />
+                                <small class="text-muted">Status: @Html.DisplayFor(modelItem => item.Invoice.PaymentStatus)</small>
+                            }
+                            else
+                            {
+                                <small class="text-muted">Invoice not found</small>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @{
+                                // Display stars based on rating
+                                var starCount = item.Rating;
+                                for (int i = 0; i < starCount; i++)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                                for (int i = 0; i < (5 - starCount); i++)
+                                {
+                                    <i class="far fa-star text-secondary"></i> @* Outline stars for remaining *@
+                                }
+                                <br />
+                                <small class="text-muted">(@Html.DisplayFor(modelItem => item.Rating)/5)</small>
+                            }
+                        </td>
+                        <td>
+                            @* Truncate long messages for better table readability *@
+                            @{
+                                var message = item.Message;
+                                if (!string.IsNullOrEmpty(message) && message.Length > 100)
+                                {
+                                    message = message.Substring(0, 100) + "...";
+                                }
+                            }
+                            @Html.DisplayFor(modelItem => message)
+                        </td>
+                        <td class="text-center">
+                            @* Center align action links *@
+                            <div class="btn-group" role="group" aria-label="Feedback Actions">
+                                @* Group buttons *@
+                                <a asp-action="Edit" asp-route-id="@item.FeedbanckID" class="btn btn-sm btn-info" title="Edit"><i class="fas fa-edit"></i></a>
+                                <a asp-action="Details" asp-route-id="@item.FeedbanckID" class="btn btn-sm btn-secondary mx-1" title="Details"><i class="fas fa-info-circle"></i></a>
+                                <a asp-action="Delete" asp-route-id="@item.FeedbanckID" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    }

@@ -1,36 +1,91 @@
 ﻿@model LogisticsWebApp.Models.FeedBack
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Feedback Details"; // More descriptive title
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Feedback Details</h1>
 
-<div>
-    <h4>FeedBack</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Invoice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Invoice.PaymentStatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rating)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rating)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Message)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Message)
-        </dd>
-    </dl>
+    <hr class="mb-4" />
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            @* Adjust column width for details view *@
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Customer Feedback Information</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        @* Use description list for details *@
+                        <dt class="col-sm-3 text-secondary">
+                            @Html.DisplayNameFor(model => model.FeedbanckID) @* Display Feedback ID *
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.FeedbanckID)
+                        </dd>
+
+                        <dt class="col-sm-3 text-secondary">
+                            @Html.DisplayNameFor(model => model.Invoice)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @* Display meaningful Invoice identifiers *@
+                            <strong>Invoice ID: @Html.DisplayFor(model => model.Invoice.InvoiceID)</strong>
+                            <br />
+                            @if (Model.Invoice != null)
+                            {
+                                <small class="text-muted">Total Amount: @Html.DisplayFor(model => model.Invoice.TotalAmount)</small>
+                                <br />
+                                <small class="text-muted">Payment Status: @Html.DisplayFor(model => model.Invoice.PaymentStatus)</small>
+                            }
+                            else
+                            {
+                                <small class="text-muted">Invoice details not available.</small>
+                            }
+                            </dd>
+
+                        <dt class="col-sm-3 text-secondary">
+                                @Html.DisplayNameFor(model => model.Rating)
+                        </dt>
+                        <dd class="col-sm-9">
+                                @{
+                                    // Display stars based on rating
+                                    var starCount = Model.Rating;
+                                    for (int i = 0; i < starCount; i++)
+                                    {
+                                    <i class="fas fa-star text-warning fa-lg"></i> @* Larger stars *@
+                                    }
+                                    for (int i = 0; i < (5 - starCount); i++)
+                                    {
+                                    <i class="far fa-star text-secondary fa-lg"></i> @* Outline stars for remaining *@
+                                    }
+                                <span class="ms-2 text-muted">(@Html.DisplayFor(model => model.Rating)/5)</span> @* Numeric rating next to stars *@
+                                }
+                        </dd>
+
+                        <dt class="col-sm-3 text-secondary">
+                                @Html.DisplayNameFor(model => model.Message)
+                        </dt>
+                        <dd class="col-sm-9">
+                            <p class="mb-0">@Html.DisplayFor(model => model.Message)</p> @* Display message with paragraph styling *@
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a asp-action="Edit" asp-route-id="@Model?.FeedbanckID" class="btn btn-warning me-2">
+            <i class="fas fa-edit"></i> Edit Feedback
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-alt-circle-left"></i> Back to Feedback List
+        </a>
+    </div>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.FeedbanckID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+    }

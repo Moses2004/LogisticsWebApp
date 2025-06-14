@@ -1,42 +1,66 @@
 ﻿@model LogisticsWebApp.Models.FeedBack
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Submit Feedback"; // More user-friendly title
 }
 
-<h1>Create</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Submit Customer Feedback</h1>
 
-<h4>FeedBack</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="InvoiceID" class="control-label"></label>
-                <select asp-for="InvoiceID" class ="form-control" asp-items="ViewBag.InvoiceID"></select>
+    <hr class="mb-4" />
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Your Feedback Details</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="InvoiceID" class="form-label">Invoice</label> @* Custom label for clarity *@
+                            <select asp-for="InvoiceID" class="form-control" asp-items="ViewBag.InvoiceID">
+                                <option value="">-- Select Invoice --</option> @* Placeholder option *@
+                            </select>
+                            <span asp-validation-for="InvoiceID" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Rating" class="form-label">Rating (1-5 Stars)</label> @* More descriptive label for rating *@
+                            <input asp-for="Rating" class="form-control" type="number" min="1" max="5" placeholder="Enter rating between 1 and 5" /> @* Added type="number", min, max, placeholder *@
+                            <span asp-validation-for="Rating" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Message" class="form-label"></label>
+                            <textarea asp-for="Message" class="form-control" rows="4" placeholder="Enter your feedback message here..."></textarea> @* Added rows and placeholder *@
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" value="Create" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane"></i> Submit Feedback @* Icon for submission *@
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Rating" class="control-label"></label>
-                <input asp-for="Rating" class="form-control" />
-                <span asp-validation-for="Rating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
-                <textarea asp-for="Message" class="form-control"></textarea>
-                <span asp-validation-for="Message" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="mt-4 text-center">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-alt-circle-left"></i> Back to Feedback List
+        </a>
+    </div>
+
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <!-- Ensure Font Awesome is included in your _Layout.cshtml for icons -->
 }

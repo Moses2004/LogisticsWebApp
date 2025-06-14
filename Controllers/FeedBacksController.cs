@@ -48,7 +48,7 @@ namespace LogisticsWebApp.Controllers
         // GET: FeedBacks/Create
         public IActionResult Create()
         {
-            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "PaymentStatus");
+            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID" );
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace LogisticsWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "PaymentStatus", feedBack.InvoiceID);
+            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID", feedBack.InvoiceID);
             return View(feedBack);
         }
 
@@ -82,7 +82,7 @@ namespace LogisticsWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "PaymentStatus", feedBack.InvoiceID);
+            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID", feedBack.InvoiceID);
             return View(feedBack);
         }
 
@@ -118,7 +118,7 @@ namespace LogisticsWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "PaymentStatus", feedBack.InvoiceID);
+            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID",feedBack.InvoiceID);
             return View(feedBack);
         }
 
