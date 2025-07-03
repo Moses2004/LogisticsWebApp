@@ -22,10 +22,26 @@ namespace LogisticsWebApp.Controllers
         }
 
         // GET: Drivers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Drivers.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var drivers = from d in _context.Drivers
+                          select d;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                // Convert searchString to lowercase once
+                string lowerSearchString = searchString.ToLower();
+
+                // Filter drivers by Name or Phone number (case-insensitive by converting both to lower)
+                drivers = drivers.Where(d => d.Name.ToLower().Contains(lowerSearchString) ||
+                                             d.Phone.ToLower().Contains(lowerSearchString));
+            }
+
+            return View(await drivers.ToListAsync());
         }
+
 
         // GET: Drivers/Details/5
         public async Task<IActionResult> Details(int? id)

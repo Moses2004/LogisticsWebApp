@@ -49,7 +49,7 @@ public class OrderlinesController : Controller
         ModelState.Remove("CustomerID");
         ModelState.Remove("Customer"); // Clear errors for the navigation property too
 
-        // Now, re-evaluate ModelState.IsValid. It should pass if other fields are valid.
+     
         if (ModelState.IsValid)
         {
             _context.Add(orderline);
@@ -72,8 +72,7 @@ public class OrderlinesController : Controller
             return RedirectToAction(nameof(MyOrders));
         }
 
-        // If we reach here, ModelState is invalid due to OTHER fields (not CustomerID/Customer)
-        // Return the view with the model to display validation messages for other fields.
+ 
         return View(orderline);
     }
 

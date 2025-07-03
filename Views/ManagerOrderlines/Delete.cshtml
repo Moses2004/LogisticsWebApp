@@ -1,57 +1,89 @@
 ﻿@model LogisticsWebApp.Models.Orderline
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Order"; // More descriptive title
 }
 
-<h1>Delete</h1>
+<div class="container mt-4"> @* Added container for better spacing *@
+    <div class="row">
+        <div class="col-md-8 offset-md-2"> @* Centered content and made it wider *@
+            <div class="card shadow border-danger mb-4"> @* Styled card with red border to indicate danger *@
+                <div class="card-header bg-danger text-white text-center">
+                    <h2 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h2> @* Prominent warning heading with icon *@
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title text-center text-danger mb-3">Are you sure you want to delete this Order?</h4>
+                    <p class="text-center text-muted">Review the details below before proceeding.</p>
+                    <hr />
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Orderline</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Customer.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InitialAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InitialAddress)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DestinationAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DestinationAddress)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WeightKg)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WeightKg)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="OrderlineID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+                    <dl class="row dl-horizontal"> @* Description list for details *@
+                        <dt class = "col-sm-4 text-dark fw-bold"> @* Styled labels to be bold and dark *@
+                            <i class="fas fa-hashtag"></i> Orderline ID:
+                        </dt>
+                        <dd class = "col-sm-8">
+                            @Html.DisplayFor(model => model.OrderlineID)
+                        </dd>
+
+                        <dt class = "col-sm-4 text-dark fw-bold">
+                            <i class="fas fa-user"></i> @Html.DisplayNameFor(model => model.Customer)
+                        </dt>
+                        <dd class = "col-sm-8">
+                            @Html.DisplayFor(model => model.Customer.UserName) 
+                        </dd>
+
+                        <dt class = "col-sm-4 text-dark fw-bold">
+                            <i class="fas fa-map-marker-alt"></i> @Html.DisplayNameFor(model => model.InitialAddress)
+                        </dt>
+                        <dd class = "col-sm-8">
+                            @Html.DisplayFor(model => model.InitialAddress)
+                        </dd>
+
+                        <dt class = "col-sm-4 text-dark fw-bold">
+                            <i class="fas fa-map-marked-alt"></i> @Html.DisplayNameFor(model => model.DestinationAddress)
+                        </dt>
+                        <dd class = "col-sm-8">
+                            @Html.DisplayFor(model => model.DestinationAddress)
+                        </dd>
+
+                        <dt class = "col-sm-4 text-dark fw-bold">
+                            <i class="fas fa-calendar-alt"></i> @Html.DisplayNameFor(model => model.Date)
+                        </dt>
+                        <dd class = "col-sm-8">
+                            @Html.DisplayFor(model => model.Date)
+                        </dd>
+
+                        <dt class = "col-sm-4 text-dark fw-bold">
+                            <i class="fas fa-balance-scale"></i> @Html.DisplayNameFor(model => model.WeightKg)
+                        </dt>
+                        <dd class = "col-sm-8">
+                            @Html.DisplayFor(model => model.WeightKg) 
+                        </dd>
+
+                        <dt class = "col-sm-4 text-dark fw-bold">
+                            <i class="fas fa-info-circle"></i> @Html.DisplayNameFor(model => model.Status)
+                        </dt>
+                        <dd class = "col-sm-8">
+                            <span class="badge @(Model.Status == "Completed" ? "bg-success" : Model.Status == "In Progress" ? "bg-info" : "bg-warning text-dark")"> 
+                                @Html.DisplayFor(model => model.Status)
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="card-footer text-center"> 
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="OrderlineID" />
+                        <button type="submit" class="btn btn-danger btn-lg me-3"> 
+                            <i class="fas fa-trash-alt"></i> Delete Permanently
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg"> 
+                            <i class="fas fa-arrow-alt-circle-left"></i> Cancel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    }

@@ -13,21 +13,18 @@ namespace LogisticsWebApp.Models
 
         // Foreign key to AspNetUsers table (IdentityUser)
         [Required]
-        public required string CustomerID { get; set; } // Added 'required' keyword here
-
-       
+        public required string CustomerID { get; set; }
 
         [ForeignKey("CustomerID")]
-        // Navigation property to the IdentityUser
-        // This links an Orderline to a specific customer
+   
         public required IdentityUser Customer { get; set; }
 
         [Required]
-        [StringLength(255)] // Added StringLength for database column size
+        [StringLength(255)] 
         public required string InitialAddress { get; set; }
 
         [Required]
-        [StringLength(255)] // Added StringLength for database column size
+        [StringLength(255)] 
         public required string DestinationAddress { get; set; }
 
         [Required]

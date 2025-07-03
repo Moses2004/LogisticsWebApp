@@ -50,7 +50,7 @@ namespace LogisticsWebApp.Controllers
         // GET: ManagerOrderlines/Create
         public IActionResult Create()
         {
-            ViewData["CustomerID"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["CustomerID"] = new SelectList(_context.Users, "Id", "UserName");
             return View();
         }
 

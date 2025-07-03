@@ -17,9 +17,9 @@ namespace LogisticsWebApp.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Phone] // Allows for phone number validation
+        [Phone] 
         [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; } // Add Phone Number here for editing
+        public string PhoneNumber { get; set; } 
 
         public List<RoleSelection> AllRoles { get; set; } = new List<RoleSelection>();
     }

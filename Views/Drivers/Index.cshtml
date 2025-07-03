@@ -5,7 +5,6 @@
 }
 
 <style>
-    /* Inherit general body styling from _Layout.cshtml if available, otherwise include it */
     body {
         font-family: 'Montserrat', sans-serif;
         background: linear-gradient(to right, #ece9e6, #ffffff);
@@ -14,9 +13,8 @@
         line-height: 1.6;
     }
 
-    /* Content Container - Consistent with other pages */
     .content-container {
-        max-width: 1100px; /* Adjust width as needed for table */
+        max-width: 1100px;
         margin: 40px auto;
         padding: 30px;
         background-color: #ffffff;
@@ -25,7 +23,6 @@
         border: 1px solid #e0e0e0;
     }
 
-    /* Page Heading (H1) Styling - Consistent with My Orders page */
     h1 {
         text-align: center;
         color: #2c3e50;
@@ -49,8 +46,7 @@
             border-radius: 5px;
         }
 
-    /* Table Styling - Consistent with My Orders page */
-    .drivers-table { /* Changed class name to differentiate from orders-table */
+    .drivers-table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 30px;
@@ -97,11 +93,10 @@
             border-bottom: none;
         }
 
-    /* Create New Button Styling - Consistent with Register New User button */
     .create-new-button {
         display: inline-block;
         padding: 12px 25px;
-        background-color: #3498db; /* Blue */
+        background-color: #3498db;
         color: white;
         text-decoration: none;
         border-radius: 8px;
@@ -109,114 +104,151 @@
         font-size: 1.1em;
         transition: background-color 0.3s ease, transform 0.2s ease;
         text-align: center;
-        margin-bottom: 30px; /* Space below button */
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: none; /* No default button border */
+        border: none;
         cursor: pointer;
     }
 
         .create-new-button:hover {
-            background-color: #2980b9; /* Darker blue on hover */
-            transform: translateY(-2px); /* Slight lift effect */
+            background-color: #2980b9;
+            transform: translateY(-2px);
         }
 
-        .create-new-button i { /* For Font Awesome icon if you use it */
+        .create-new-button i {
             margin-right: 8px;
         }
 
-    /* Action Links Styling - Consistent with My Orders actions (but for managers) */
-    .action-links a {
-        display: inline-block;
-        margin-right: 15px;
-        text-decoration: none;
-        padding: 6px 12px;
-        border-radius: 5px;
-        font-size: 0.9em;
-        transition: background-color 0.2s ease, color 0.2s ease;
+    .search-form {
+        margin-bottom: 30px;
     }
 
-        .action-links a:last-child {
-            margin-right: 0;
-        }
-
-    .action-links .details-link {
-        color: #3498db;
-        border: 1px solid #3498db;
+    .input-group .form-control {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        box-shadow: none;
+        border-color: #ccc;
+        height: 45px;
     }
 
-        .action-links .details-link:hover {
-            background-color: #3498db;
+    .input-group .btn {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        height: 45px;
+        font-weight: 600;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .input-group .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+        .input-group .btn-outline-secondary:hover {
+            background-color: #6c757d;
             color: white;
         }
 
-    .action-links .edit-link {
-        color: #ffc107; /* Yellow-orange */
-        border: 1px solid #ffc107;
+    .input-group .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+        margin-left: 8px;
+        border-radius: 8px;
     }
 
-        .action-links .edit-link:hover {
-            background-color: #ffc107;
-            color: #343a40;
-        }
-
-    .action-links .delete-link {
-        color: #dc3545; /* Red */
-        border: 1px solid #dc3545;
-    }
-
-        .action-links .delete-link:hover {
+        .input-group .btn-outline-danger:hover {
             background-color: #dc3545;
             color: white;
         }
 
+    .alert {
+        margin-top: 20px;
+        border-radius: 8px;
+        font-size: 1.1em;
+    }
 </style>
 
 <div class="content-container">
-    <h1>Manage Drivers</h1>
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h1 class="text-start mb-0">🚚 Driver Management</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-action="Create" class="create-new-button">
+                <i class="fas fa-plus-circle"></i> Register New Driver
+            </a>
+        </div>
+    </div>
 
-    <p>
-        <a asp-action="Create" class="create-new-button">
-            <i class="fas fa-plus-circle"></i> Register New Driver
-        </a>
-    </p>
+    <form asp-controller="Drivers" asp-action="Index" method="get" class="search-form">
+        <div class="input-group">
+            <input type="text" name="searchString" class="form-control" placeholder="Search by Name or Phone Number..." value="@ViewData["CurrentFilter"]" />
+            <button type="submit" class="btn btn-outline-secondary">
+                <i class="fas fa-search"></i> Search
+            </button>
+            <a asp-action="Index" class="btn btn-outline-danger">Clear</a>
+        </div>
+    </form>
 
-    <table class="drivers-table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Phone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Age)
-                </th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    @if (!Model.Any() && !string.IsNullOrEmpty(ViewData["CurrentFilter"] as string))
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            <i class="fas fa-exclamation-circle"></i> No drivers found matching your search term: "<strong>@ViewData["CurrentFilter"]</strong>".
+        </div>
+    }
+    else if (!Model.Any())
+    {
+        <div class="alert alert-info text-center" role="alert">
+            <i class="fas fa-info-circle"></i> No drivers recorded yet. Click "Register New Driver" to add one.
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="drivers-table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Phone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Age)
-                    </td>
-                    <td class="action-links">
-                        <a asp-action="Edit" asp-route-id="@item.DriverID" class="edit-link">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.DriverID" class="details-link">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.DriverID" class="delete-link">Delete</a>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Age)
+                    </th>
+                    <th style="width: 200px;" class="text-center">Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Age)
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group" aria-label="Driver Actions">
+                                <a asp-action="Edit" asp-route-id="@item.DriverID" class="btn btn-sm btn-warning" title="Edit">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.DriverID" class="btn btn-sm btn-info text-white" title="Details">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.DriverID" class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @section Scripts {

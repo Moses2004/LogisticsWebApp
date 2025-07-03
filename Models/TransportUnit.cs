@@ -21,7 +21,7 @@ namespace LogisticsWebApp.Models
         [ForeignKey("DriverID")]
         public Driver? Driver { get; set; } // Navigation property
 
-        // Foreign Key for Assistant (optional as per some diagrams, but let's make it required for now, can change if needed)
+ 
         [Required] // A TransportUnit must have an Assistant
         public int AssistantID { get; set; }
         [ForeignKey("AssistantID")]

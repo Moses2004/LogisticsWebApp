@@ -6,10 +6,10 @@ namespace LogisticsWebApp.Models
 {
     public class UserWithRolesViewModel
     {
-        public string Id { get; set; } // Matches IdentityUser's Id
-        public string UserName { get; set; } // Matches IdentityUser's UserName
-        public string Email { get; set; } // Matches IdentityUser's Email
-        public IEnumerable<string> Roles { get; set; } = new List<string>(); // List of role names
-        public string PhoneNumber { get; set; } // ADDED: Phone Number property
+        public string Id { get; set; } 
+        public string UserName { get; set; } 
+        public string Email { get; set; } 
+        public IEnumerable<string> Roles { get; set; } = new List<string>();
+        public string PhoneNumber { get; set; }
     }
 }

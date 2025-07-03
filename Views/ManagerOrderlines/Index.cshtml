@@ -1,65 +1,103 @@
 ﻿@model IEnumerable<LogisticsWebApp.Models.Orderline>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Order List"; // Changed title for clarity and professionalism
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    @* Added a container for proper spacing and responsiveness *@
+    <div class="row mb-3">
+        @* Row for the heading and create button *@
+        <div class="col-md-6">
+            <h1 class="display-4">📦 Current Orders</h1> @* Used Bootstrap display-4 for larger heading, added an emoji for visual appeal *@
+        </div>
+        <div class="col-md-6 text-md-end align-self-end">
+            @* Aligned create button to the right *@
+            <a asp-action="Create" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle"></i> Create New Order @* Added a Font Awesome icon for "Create New" button *@
+            </a>
+        </div>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InitialAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DestinationAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WeightKg)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InitialAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DestinationAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WeightKg)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderlineID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OrderlineID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OrderlineID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="table-responsive">
+        @* Made the table responsive for smaller screens *@
+        <table class="table table-hover table-striped table-bordered shadow-sm">
+            @* Added Bootstrap classes for styling and a subtle shadow *@
+            <thead class="bg-primary text-white">
+                @* Blue header with white text for better contrast *@
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.UserName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InitialAddress)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DestinationAddress)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WeightKg)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th class="text-center">Actions</th> 
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Customer.UserName) 
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InitialAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DestinationAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WeightKg) 
+                        </td>
+                        <td>
+                            <span class="badge @(item.Status == "Completed" ? "bg-success" : item.Status == "In Progress" ? "bg-info" : "bg-warning text-dark")"> 
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </span>
+                        </td>
+                        <td class="text-center"> 
+                            <div class="btn-group" role="group" aria-label="Order Actions">
+                                @* Grouped action buttons for better layout *@
+                                <a asp-action="Edit" asp-route-id="@item.OrderlineID" class="btn btn-sm btn-info text-white" title="Edit">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.OrderlineID" class="btn btn-sm btn-secondary" title="Details">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.OrderlineID" class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (!Model.Any())
+        {
+            <div class="alert alert-info text-center" role="alert">
+                No orders found. Click "Create New Order" to add one.
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    }
