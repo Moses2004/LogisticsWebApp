@@ -4,6 +4,7 @@ using LogisticsWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LogisticsWebApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250704130531_InitialDatabaseSetupSecond")]
+    partial class InitialDatabaseSetupSecond
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +110,6 @@ namespace LogisticsWebApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceID"));
 
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("OrderlineID")
                         .HasColumnType("int");
 
@@ -125,8 +125,6 @@ namespace LogisticsWebApp.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("InvoiceID");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("OrderlineID");
 
@@ -455,10 +453,6 @@ namespace LogisticsWebApp.Data.Migrations
 
             modelBuilder.Entity("LogisticsWebApp.Models.Invoice", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
                     b.HasOne("LogisticsWebApp.Models.Orderline", "Orderline")
                         .WithMany()
                         .HasForeignKey("OrderlineID")
@@ -470,8 +464,6 @@ namespace LogisticsWebApp.Data.Migrations
                         .HasForeignKey("TransportUnitID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Customer");
 
                     b.Navigation("Orderline");
 

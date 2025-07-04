@@ -1,4 +1,5 @@
 ﻿// Models/Invoice.cs
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,6 +30,8 @@ namespace LogisticsWebApp.Models // Adjust this namespace to match your project'
         [StringLength(50)] // Example max length for status string
         public string PaymentStatus { get; set; } // e.g., "Pending", "Paid", "Cancelled"
 
-        // You can add more validation attributes or properties as needed
+        public string? CustomerId { get; set; } // Foreign key to IdentityUser.Id. Make nullable if existing invoices might not have a customer.
+        [ForeignKey("CustomerId")]
+        public IdentityUser? Customer { get; set; }
     }
 }
