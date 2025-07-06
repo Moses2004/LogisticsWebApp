@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LogisticsWebApp.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Admin,Manager")]
     public class ManagerOrderlinesController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -23,12 +23,23 @@ public class UsersController : Controller
     }
 
     // GET: Users (Lists all users with their assigned roles)
-    public async Task<IActionResult> Index()
+    // Controllers/UsersController.cs - MODIFIED Index method
+    public async Task<IActionResult> Index(string searchString)
     {
-        var users = await _userManager.Users.ToListAsync();
+        var users = _userManager.Users.AsQueryable(); // Start with IQueryable for potential future server-side filtering
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            users = users.Where(u => u.UserName.Contains(searchString) ||
+                                     u.Email.Contains(searchString) ||
+                                     (u.PhoneNumber != null && u.PhoneNumber.Contains(searchString)));
+        }
+
+        var usersList = await users.ToListAsync(); // Execute the query
+
         var usersWithRoles = new List<UserWithRolesViewModel>();
 
-        foreach (var user in users)
+        foreach (var user in usersList) // Iterate over the filtered list
         {
             var roles = await _userManager.GetRolesAsync(user);
             usersWithRoles.Add(new UserWithRolesViewModel
@@ -40,9 +51,10 @@ public class UsersController : Controller
                 PhoneNumber = user.PhoneNumber
             });
         }
+
+        ViewData["CurrentFilter"] = searchString; // Pass search string back to view
         return View(usersWithRoles);
     }
-
     // GET: Users/Details/{id} (Shows details of a specific user)
     public async Task<IActionResult> Details(string id)
     {
