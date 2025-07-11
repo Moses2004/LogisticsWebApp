@@ -17,7 +17,7 @@ namespace LogisticsWebApp.Models
 
         [ForeignKey("CustomerID")]
    
-        public required IdentityUser Customer { get; set; }
+        public IdentityUser? Customer { get; set; }
 
         [Required]
         [StringLength(255)] 

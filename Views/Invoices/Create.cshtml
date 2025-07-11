@@ -47,12 +47,20 @@
                             <input asp-for="TotalAmount" class="form-control" />
                             <span asp-validation-for="TotalAmount" class="text-danger"></span>
                         </div>
-                        <div class="form-group mb-4">
-                            @* Add more margin-bottom before the button *@
-                            <label asp-for="PaymentStatus" class="form-label"></label>
-                            <input asp-for="PaymentStatus" class="form-control" />
-                            <span asp-validation-for="PaymentStatus" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="PaymentStatus" class="form-label fs-5">Payment Status</label>
+                            <select asp-for="PaymentStatus" class="form-select form-select-lg" aria-describedby="paymentStatusHelp" required>
+                                <option value="">-- Select Status --</option>
+                                <option value="Pending">🔴 Pending</option>
+                                <option value="Partially Paid">🟡 Partially Paid</option>
+                                <option value="Paid">🟢 Paid</option>
+                                <option value="Overdue">🟠 Overdue</option>
+                                <option value="Cancelled">⚪ Cancelled</option>
+                            </select>
+                            <div id="paymentStatusHelp" class="form-text">Select the current payment status of this invoice.</div>
+                            <span asp-validation-for="PaymentStatus" class="text-danger small mt-1 d-block"></span>
                         </div>
+
 
                         <div class="d-grid gap-2">
                             @* Use Bootstrap's d-grid for full-width button *@

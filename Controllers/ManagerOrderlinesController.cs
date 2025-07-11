@@ -50,6 +50,7 @@ namespace LogisticsWebApp.Controllers
         // GET: ManagerOrderlines/Create
         public IActionResult Create()
         {
+            // Correct: Value is "Id" (GUID), Text is "UserName" (email)
             ViewData["CustomerID"] = new SelectList(_context.Users, "Id", "UserName");
             return View();
         }
@@ -61,16 +62,21 @@ namespace LogisticsWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OrderlineID,CustomerID,InitialAddress,DestinationAddress,Date,WeightKg,Status")] Orderline orderline)
         {
-            if (ModelState.IsValid)
+            // The previous [Bind] attribute was missing CustomerID. Make sure CustomerID is included.
+            // Ensure you do NOT bind the 'Customer' navigation property itself.
+            // The CustomerID (string/GUID) is sufficient for linking.
+
+            if (ModelState.IsValid) // This should now pass if no other errors exist
             {
                 _context.Add(orderline);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerID"] = new SelectList(_context.Users, "Id", "Id", orderline.CustomerID);
+
+            // If ModelState is not valid, ensure CustomerID is correctly populated for the dropdown
+            ViewData["CustomerID"] = new SelectList(_context.Users, "Id", "UserName", orderline.CustomerID);
             return View(orderline);
         }
-
         // GET: ManagerOrderlines/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
