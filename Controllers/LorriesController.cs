@@ -68,21 +68,7 @@ namespace LogisticsWebApp.Controllers
             return View(lorry);
         }
 
-        // GET: Lorries/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var lorry = await _context.Lorries.FindAsync(id);
-            if (lorry == null)
-            {
-                return NotFound();
-            }
-            return View(lorry);
-        }
+        
 
         // POST: Lorries/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

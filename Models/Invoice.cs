@@ -1,4 +1,5 @@
 ﻿// Models/Invoice.cs
+using System;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -33,5 +34,8 @@ namespace LogisticsWebApp.Models // Adjust this namespace to match your project'
         public string? CustomerId { get; set; } // Foreign key to IdentityUser.Id. Make nullable if existing invoices might not have a customer.
         [ForeignKey("CustomerId")]
         public IdentityUser? Customer { get; set; }
+
+
+        public DateTime? InvoiceDate { get; set; }
     }
 }

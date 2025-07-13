@@ -1,0 +1,224 @@
+﻿@{
+    ViewData["Title"] = "Comprehensive Invoice Report";
+}
+
+<style>
+    /* Basic styling for chart containers */
+    .chart-container {
+        width: 100%;
+        max-width: 600px; /* Adjust as needed */
+        margin: 20px auto;
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        text-align: center; /* Center canvas within container */
+    }
+
+    .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Two columns on larger screens */
+        gap: 20px;
+        margin-top: 30px;
+    }
+</style>
+
+<h1>Comprehensive Invoice Report</h1>
+<hr />
+
+<div class="chart-grid">
+    <div class="chart-container">
+        <h2>Sales by Categories (e.g., Cities/Customers)</h2>
+        <canvas id="salesByCategoriesChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h2>Product Sales Analysis (Placeholder)</h2>
+        <canvas id="productSalesAnalysisChart"></canvas>
+        <p>This chart requires product type data in your invoices.</p>
+    </div>
+</div>
+
+<div class="chart-container" style="max-width: 900px;">
+    <h2>Revenue Analysis (Monthly)</h2>
+    <canvas id="revenueAnalysisChart"></canvas>
+</div>
+
+
+@section Scripts {
+    <script>
+        // Function to fetch data and create Sales by Categories Chart
+        async function createSalesByCategoriesChart() {
+            const response = await fetch('/Report/GetSalesByCitiesData'); // Adjust to your actual data endpoint
+            const data = await response.json();
+
+            const labels = data.map(item => item.category); // 'category' from your C# JSON
+            const values = data.map(item => item.value);   // 'value' from your C# JSON
+
+            const ctx = document.getElementById('salesByCategoriesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: [ // More vibrant colors
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+                            '#E7E9ED', '#A7C957', '#C9A7ED', '#57C9C9', '#FF4E50', '#FCB94A'
+                        ],
+                        hoverOffset: 8 // Slight hover effect
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    aspectRatio: 1, // Makes the chart square
+                    plugins: {
+                        legend: {
+                            position: 'right', // Or 'top', 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total Sales by Category/Customer'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to fetch data and create Revenue Analysis Chart
+        async function createRevenueAnalysisChart() {
+            const response = await fetch('/Report/GetRevenueAnalysisData');
+            const data = await response.json();
+
+            const ctx = document.getElementById('revenueAnalysisChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar', // Start with a bar chart
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Current Year Revenue',
+                            data: data.currentRevenue,
+                            backgroundColor: 'rgba(75, 192, 192, 0.8)', // Teal bars
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            borderRadius: 5 // Rounded corners for bars
+                        },
+                        {
+                            label: 'Previous Year Revenue',
+                            data: data.previousRevenue,
+                            type: 'line', // This dataset will be a line
+                            borderColor: 'rgba(255, 99, 132, 1)', // Red line
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            fill: false, // Don't fill area under line
+                            tension: 0.3, // Slightly curved line
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    aspectRatio: 2, // Wider than tall
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Monthly Revenue Comparison'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false // Hide x-axis grid lines
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return '$' + value.toLocaleString(); // Format as currency
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Placeholder for Product Sales Analysis (Radar Chart) - requires specific data structure
+        async function createProductSalesAnalysisChart() {
+            // This chart needs your Invoice/Orderline model to contain product type data
+            // For now, it's a placeholder. You'd fetch data from a new endpoint here.
+            // Example data (you'd replace with data from your controller):
+            const data = {
+                labels: ['Electronics', 'Home Goods', 'Clothing', 'Books', 'Groceries'],
+                datasets: [
+                    {
+                        label: 'Q1 Sales',
+                        data: [65, 59, 90, 81, 56],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+                    },
+                    {
+                        label: 'Q2 Sales',
+                        data: [28, 48, 40, 19, 96],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+                    }
+                ]
+            };
+
+            const ctx = document.getElementById('productSalesAnalysisChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: data,
+                options: {
+                    responsive: true,
+                    aspectRatio: 1,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Product Sales Analysis by Category'
+                        }
+                    },
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100 // Adjust max based on your data
+                        }
+                    }
+                }
+            });
+        }
+
+
+        // Initialize charts on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            createSalesByCategoriesChart();
+            createRevenueAnalysisChart();
+            createProductSalesAnalysisChart(); // Call this when you have relevant data
+        });
+    </script>
+}

@@ -5,50 +5,40 @@
 @inject UserManager<IdentityUser> UserManager
 
 @{
-    ViewData["Title"] = "Invoices Overview"; // More descriptive title
-    var currentUserIsManager = User.IsInRole("Manager"); // Get manager role status
-    var currentUserIsClient = User.IsInRole("Client"); // Get client role status
+    ViewData["Title"] = "Invoices Overview";
+    var currentUserIsManager = User.IsInRole("Manager");
 }
 
 <div class="container mt-4">
-    @* Add a container for better spacing *@
-    <h1 class="mb-4 text-primary">Invoice List</h1> @* Bootstrap classes for styling *@
+    <h1 class="mb-4 text-primary">Invoice List</h1>
 
-    @* Only show "Create New" button if the current user is a Manager *@
     @if (currentUserIsManager)
     {
         <p>
-            <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus-circle"></i> Create New Invoice</a> @* Add a button style and icon (requires Font Awesome) *@
+            <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus-circle"></i> Create New Invoice</a>
         </p>
     }
 
     <div class="table-responsive">
-        @* Make table responsive on smaller screens *@
         <table class="table table-hover table-bordered shadow-sm">
-            @* Add hover effect, borders, and a subtle shadow *@
             <thead class="bg-primary text-white">
-                @* Blue header with white text *@
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Orderline) @* This will show "Orderline" by default *@
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.TransportUnit) @* This will show "TransportUnit" by default *@
-                    </th>
+                    <th>Orderline</th>
+                    <th>Transport Unit</th>
                     <th>
                         @Html.DisplayNameFor(model => model.TotalAmount)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.PaymentStatus)
                     </th>
-                    @* Only show Customer column for Managers *@
+                    <th>Date</th>
                     @if (currentUserIsManager)
                     {
                         <th>
                             @Html.DisplayNameFor(model => model.Customer)
                         </th>
                     }
-                    <th class="text-center">Actions</th> @* Center align the Actions header *@
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,22 +46,19 @@
                 {
                     <tr>
                         <td>
-                            @* Display a more meaningful Orderline identifier. *@
-                            @Html.DisplayFor(modelItem => item.Orderline.InitialAddress) @* Assuming Orderline has InitialAddress *@
+                            @Html.DisplayFor(modelItem => item.Orderline.InitialAddress)
                             <br />
-                            <small class="text-muted">Order ID: @Html.DisplayFor(modelItem => item.OrderlineID)</small> @* Show ID as secondary info *@
+                            <small class="text-muted">Order ID: @Html.DisplayFor(modelItem => item.OrderlineID)</small>
                         </td>
                         <td>
-                            @* Display a more meaningful TransportUnit identifier. *@
-                            @Html.DisplayFor(modelItem => item.TransportUnit.Container)
+                            @Html.DisplayFor(modelItem => item.TransportUnit.TransportUnitID)
                             <br />
-                            <small class="text-muted">Unit ID: @Html.DisplayFor(modelItem => item.TransportUnitID)</small> @* Show ID as secondary info *@
+                            <small class="text-muted">Unit ID: @Html.DisplayFor(modelItem => item.TransportUnitID)</small>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.TotalAmount)
                         </td>
                         <td>
-                            @* Add a badge for PaymentStatus if you have distinct values like "Paid", "Pending" *@
                             @{
                                 var statusClass = "";
                                 switch (item.PaymentStatus)
@@ -85,6 +72,9 @@
                                     case "Overdue":
                                         statusClass = "badge bg-danger";
                                         break;
+                                    case "Partially Paid":
+                                        statusClass = "badge bg-info";
+                                        break;
                                     default:
                                         statusClass = "badge bg-secondary";
                                         break;
@@ -92,7 +82,16 @@
                             }
                             <span class="@statusClass">@Html.DisplayFor(modelItem => item.PaymentStatus)</span>
                         </td>
-                        @* Only show Customer Email for Managers *@
+                        <td>
+                            @if (item.Orderline != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Orderline.Date)
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
                         @if (currentUserIsManager)
                         {
                             <td>
@@ -100,17 +99,13 @@
                             </td>
                         }
                         <td class="text-center">
-                            @* Center align action links *@
                             <div class="btn-group" role="group" aria-label="Invoice Actions">
-                                @* Group buttons *@
-                                @* Details link is available for both Manager and Client (controller enforces ownership) *@
-                                <a asp-action="Details" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-secondary mx-1" title="Details"><i class="fas fa-info-circle"></i></a> @* Small secondary button with icon *@
+                                <a asp-action="Details" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-secondary mx-1" title="Details"><i class="fas fa-info-circle"></i></a>
 
-                                @* Only show Edit and Delete buttons if the current user is a Manager *@
                                 @if (currentUserIsManager)
                                 {
-                                    <a asp-action="Edit" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-info" title="Edit"><i class="fas fa-edit"></i></a> @* Small info button with icon *@
-                                    <a asp-action="Delete" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash-alt"></i></a> @* Small danger button with icon *@
+                                    <a asp-action="Edit" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-info" title="Edit"><i class="fas fa-edit"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.InvoiceID" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash-alt"></i></a>
                                 }
                             </div>
                         </td>
@@ -118,9 +113,8 @@
                 }
             </tbody>
         </table>
-    </div> @* End table-responsive *@
-</div> @* End container *@
+    </div>
+</div>
 
 @section Scripts {
-@* Any page-specific scripts can go here *@
 }
