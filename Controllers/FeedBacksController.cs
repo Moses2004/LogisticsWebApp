@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LogisticsWebApp.Data;
 using LogisticsWebApp.Models;
+using Microsoft.AspNetCore.Authorization; // Add this namespace
 
 namespace LogisticsWebApp.Controllers
 {
@@ -46,17 +47,17 @@ namespace LogisticsWebApp.Controllers
         }
 
         // GET: FeedBacks/Create
+        // [Authorize(Roles = "Admin,Manager,Client")] // If only certain roles can create feedback
         public IActionResult Create()
         {
-            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID" );
+            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID");
             return View();
         }
 
         // POST: FeedBacks/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // [Authorize(Roles = "Admin,Manager,Client")] // If only certain roles can create feedback
         public async Task<IActionResult> Create([Bind("FeedbanckID,InvoiceID,Rating,Message")] FeedBack feedBack)
         {
             if (ModelState.IsValid)
@@ -70,6 +71,7 @@ namespace LogisticsWebApp.Controllers
         }
 
         // GET: FeedBacks/Edit/5
+        [Authorize(Roles = "Admin,Manager")] // Only Admin and Manager can access this
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,10 +89,9 @@ namespace LogisticsWebApp.Controllers
         }
 
         // POST: FeedBacks/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")] // Only Admin and Manager can access this
         public async Task<IActionResult> Edit(int id, [Bind("FeedbanckID,InvoiceID,Rating,Message")] FeedBack feedBack)
         {
             if (id != feedBack.FeedbanckID)
@@ -118,11 +119,12 @@ namespace LogisticsWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID",feedBack.InvoiceID);
+            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID", feedBack.InvoiceID);
             return View(feedBack);
         }
 
         // GET: FeedBacks/Delete/5
+        [Authorize(Roles = "Admin,Manager")] // Only Admin and Manager can access this
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +146,7 @@ namespace LogisticsWebApp.Controllers
         // POST: FeedBacks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")] // Only Admin and Manager can access this
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var feedBack = await _context.FeedBacks.FindAsync(id);

@@ -29,6 +29,18 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Export Options
+            </div>
+            <div class="card-body">
+                <a asp-action="ExportToExcel" class="btn btn-success">
+                    <i class="fas fa-file-excel"></i> Export to Excel
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <hr />
@@ -57,7 +69,9 @@
     </div>
 </div>
 
-@* The "Revenue by Month" section has been removed below *@
+<hr />
+
+
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -194,7 +208,72 @@
             }
         });
 
-       
+        // New: Data for Revenue by Month Chart
+        var revenueByMonthLabels = @Html.Raw(Json.Serialize(Model.RevenueByMonth.Keys));
+        var revenueByMonthData = @Html.Raw(Json.Serialize(Model.RevenueByMonth.Values));
+
+        var revenueByMonthCtx = document.getElementById('revenueByMonthChart').getContext('2d');
+        var revenueByMonthChart = new Chart(revenueByMonthCtx, {
+            type: 'doughnut', // This creates the circle chart
+            data: {
+                labels: revenueByMonthLabels,
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: revenueByMonthData,
+                    backgroundColor: [ // Add more colors as needed for more months
+                        'rgba(255, 99, 132, 0.5)', // Red
+                        'rgba(54, 162, 235, 0.5)', // Blue
+                        'rgba(255, 206, 86, 0.5)', // Yellow
+                        'rgba(75, 192, 192, 0.5)', // Green
+                        'rgba(153, 102, 255, 0.5)', // Purple
+                        'rgba(255, 159, 64, 0.5)', // Orange
+                        'rgba(192, 192, 192, 0.5)', // Grey
+                        'rgba(102, 204, 153, 0.5)', // Mint green
+                        'rgba(255, 102, 204, 0.5)', // Pink
+                        'rgba(0, 102, 102, 0.5)', // Dark teal
+                        'rgba(204, 204, 0, 0.5)', // Olive
+                        'rgba(153, 51, 0, 0.5)' // Brown
+                    ],
+                    borderColor: [ // Match border colors for consistency
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(192, 192, 192, 1)',
+                        'rgba(102, 204, 153, 1)',
+                        'rgba(255, 102, 204, 1)',
+                        'rgba(0, 102, 102, 1)',
+                        'rgba(204, 204, 0, 1)',
+                        'rgba(153, 51, 0, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
     </script>
 }
