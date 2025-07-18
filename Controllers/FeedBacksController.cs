@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LogisticsWebApp.Data;
 using LogisticsWebApp.Models;
-using Microsoft.AspNetCore.Authorization; // Add this namespace
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims; // Add this namespace for Claims
 
 namespace LogisticsWebApp.Controllers
 {
@@ -47,26 +48,47 @@ namespace LogisticsWebApp.Controllers
         }
 
         // GET: FeedBacks/Create
-        // [Authorize(Roles = "Admin,Manager,Client")] // If only certain roles can create feedback
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID
+
+            // Filter invoices to show only those belonging to the current user
+            var userInvoices = await _context.Invoices
+                                             .Where(i => i.CustomerId == userId)
+                                             .ToListAsync();
+
+            ViewData["InvoiceID"] = new SelectList(userInvoices, "InvoiceID", "InvoiceID");
             return View();
         }
 
         // POST: FeedBacks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // [Authorize(Roles = "Admin,Manager,Client")] // If only certain roles can create feedback
-        public async Task<IActionResult> Create([Bind("FeedbanckID,InvoiceID,Rating,Message")] FeedBack feedBack)
+        // [Authorize(Roles = "Admin,Manager,Client")] // Only authorized users (e.g., Clients) should create feedback
+        public async Task<IActionResult> Create([Bind("FeedbackID,InvoiceID,Rating,Message")] FeedBack feedBack)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID
+
+            // Validate that the submitted InvoiceID belongs to the current user
+            var invoiceExistsForUser = await _context.Invoices.AnyAsync(i => i.InvoiceID == feedBack.InvoiceID && i.CustomerId == userId);
+
+            if (!invoiceExistsForUser)
+            {
+                ModelState.AddModelError("InvoiceID", "You can only create feedback for your own invoices.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(feedBack);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InvoiceID"] = new SelectList(_context.Invoices, "InvoiceID", "InvoiceID", feedBack.InvoiceID);
+
+            // If ModelState is not valid or invoice doesn't belong to user, re-populate the dropdown
+            var userInvoices = await _context.Invoices
+                                             .Where(i => i.CustomerId == userId)
+                                             .ToListAsync();
+            ViewData["InvoiceID"] = new SelectList(userInvoices, "InvoiceID", "InvoiceID", feedBack.InvoiceID);
             return View(feedBack);
         }
 
@@ -92,7 +114,7 @@ namespace LogisticsWebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")] // Only Admin and Manager can access this
-        public async Task<IActionResult> Edit(int id, [Bind("FeedbanckID,InvoiceID,Rating,Message")] FeedBack feedBack)
+        public async Task<IActionResult> Edit(int id, [Bind("FeedbackID,InvoiceID,Rating,Message")] FeedBack feedBack)
         {
             if (id != feedBack.FeedbackID)
             {
