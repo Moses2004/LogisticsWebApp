@@ -56,24 +56,21 @@ namespace LogisticsWebApp.Controllers
         }
 
         // POST: ManagerOrderlines/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OrderlineID,CustomerID,InitialAddress,DestinationAddress,Date,WeightKg,Status")] Orderline orderline)
         {
-            // The previous [Bind] attribute was missing CustomerID. Make sure CustomerID is included.
-            // Ensure you do NOT bind the 'Customer' navigation property itself.
-            // The CustomerID (string/GUID) is sufficient for linking.
+          
 
-            if (ModelState.IsValid) // This should now pass if no other errors exist
+            if (ModelState.IsValid) 
             {
                 _context.Add(orderline);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            // If ModelState is not valid, ensure CustomerID is correctly populated for the dropdown
+            
             ViewData["CustomerID"] = new SelectList(_context.Users, "Id", "UserName", orderline.CustomerID);
             return View(orderline);
         }
@@ -95,8 +92,7 @@ namespace LogisticsWebApp.Controllers
         }
 
         // POST: ManagerOrderlines/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrderlineID,CustomerID,InitialAddress,DestinationAddress,Date,WeightKg,Status")] Orderline orderline)

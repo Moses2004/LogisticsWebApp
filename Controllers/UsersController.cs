@@ -130,7 +130,7 @@ public class UsersController : Controller
             return NotFound();
         }
 
-        // Update basic user properties if they are part of the form
+        
         if (user.PhoneNumber != model.PhoneNumber)
         {
             var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);

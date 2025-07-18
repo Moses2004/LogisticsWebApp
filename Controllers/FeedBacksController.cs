@@ -37,7 +37,7 @@ namespace LogisticsWebApp.Controllers
 
             var feedBack = await _context.FeedBacks
                 .Include(f => f.Invoice)
-                .FirstOrDefaultAsync(m => m.FeedbanckID == id);
+                .FirstOrDefaultAsync(m => m.FeedbackID == id);
             if (feedBack == null)
             {
                 return NotFound();
@@ -94,7 +94,7 @@ namespace LogisticsWebApp.Controllers
         [Authorize(Roles = "Admin,Manager")] // Only Admin and Manager can access this
         public async Task<IActionResult> Edit(int id, [Bind("FeedbanckID,InvoiceID,Rating,Message")] FeedBack feedBack)
         {
-            if (id != feedBack.FeedbanckID)
+            if (id != feedBack.FeedbackID)
             {
                 return NotFound();
             }
@@ -108,7 +108,7 @@ namespace LogisticsWebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FeedBackExists(feedBack.FeedbanckID))
+                    if (!FeedBackExists(feedBack.FeedbackID))
                     {
                         return NotFound();
                     }
@@ -134,7 +134,7 @@ namespace LogisticsWebApp.Controllers
 
             var feedBack = await _context.FeedBacks
                 .Include(f => f.Invoice)
-                .FirstOrDefaultAsync(m => m.FeedbanckID == id);
+                .FirstOrDefaultAsync(m => m.FeedbackID == id);
             if (feedBack == null)
             {
                 return NotFound();
@@ -161,7 +161,7 @@ namespace LogisticsWebApp.Controllers
 
         private bool FeedBackExists(int id)
         {
-            return _context.FeedBacks.Any(e => e.FeedbanckID == id);
+            return _context.FeedBacks.Any(e => e.FeedbackID == id);
         }
     }
 }

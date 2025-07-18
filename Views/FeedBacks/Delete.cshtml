@@ -23,10 +23,10 @@
                 <div class="card-body">
                     <dl class="row mb-0">
                         <dt class="col-sm-3 text-secondary">
-                            @Html.DisplayNameFor(model => model.FeedbanckID)
+                            @Html.DisplayNameFor(model => model.FeedbackID)
                         </dt>
                         <dd class="col-sm-9">
-                            @Html.DisplayFor(model => model.FeedbanckID)
+                            @Html.DisplayFor(model => model.FeedbackID)
                         </dd>
 
                         <dt class="col-sm-3 text-secondary">
@@ -81,7 +81,7 @@
 
     <div class="mt-4 text-center">
         <form asp-action="Delete">
-            <input type="hidden" asp-for="FeedbanckID" />
+            <input type="hidden" asp-for="FeedbackID" />
             <button type="submit" class="btn btn-danger btn-lg me-2">
                 @* Prominent delete button with icon *@
                 <i class="fas fa-trash-alt"></i> Confirm Delete

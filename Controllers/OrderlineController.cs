@@ -45,9 +45,9 @@ public class OrderlinesController : Controller
         orderline.CustomerID = userId;
 
         // CRUCIAL FIX: Clear model state errors for CustomerID and Customer
-        // as they are set programmatically, not from the form.
+     
         ModelState.Remove("CustomerID");
-        ModelState.Remove("Customer"); // Clear errors for the navigation property too
+        ModelState.Remove("Customer"); 
 
      
         if (ModelState.IsValid)

@@ -53,8 +53,7 @@ namespace LogisticsWebApp.Controllers
         }
 
         // POST: Lorries/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+   
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LorryID,LicensePlate,Model,CapacityKg,Status")] Lorry lorry)
@@ -68,11 +67,24 @@ namespace LogisticsWebApp.Controllers
             return View(lorry);
         }
 
-        
 
+        // GET: Lorries/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var lorry = await _context.Lorries.FindAsync(id);
+            if (lorry == null)
+            {
+                return NotFound();
+            }
+            return View(lorry);
+        }
         // POST: Lorries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LorryID,LicensePlate,Model,CapacityKg,Status")] Lorry lorry)

@@ -13,7 +13,7 @@ namespace LogisticsWebApp.Models
         [Required] // A TransportUnit must have a Lorry
         public int? LorryID { get; set; }
         [ForeignKey("LorryID")]
-        public Lorry? Lorry { get; set; } // Navigation property
+        public Lorry Lorry { get; set; } // Navigation property
 
         // Foreign Key for Driver
         [Required] // A TransportUnit must have a Driver
@@ -25,7 +25,7 @@ namespace LogisticsWebApp.Models
         [Required] // A TransportUnit must have an Assistant
         public int AssistantID { get; set; }
         [ForeignKey("AssistantID")]
-        public Assistant? Assistant { get; set; } // Navigation property
+        public Assistant Assistant { get; set; } // Navigation property
 
         [Required]
         [StringLength(100)] // Assuming container ID/description

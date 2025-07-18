@@ -1,6 +1,6 @@
 ﻿// Models/EditUserRolesViewModel.cs
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations; // For Phone attribute if you want validation
+using System.ComponentModel.DataAnnotations; // For Phone attribute 
 
 namespace LogisticsWebApp.Models
 {
