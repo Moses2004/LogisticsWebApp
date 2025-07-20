@@ -25,6 +25,8 @@
                 <tr>
                     <th>Orderline</th>
                     <th>Transport Unit</th>
+                
+                    <th>Invoice ID</th> 
                     <th>
                         @Html.DisplayNameFor(model => model.TotalAmount)
                     </th>
@@ -54,6 +56,10 @@
                             @Html.DisplayFor(modelItem => item.TransportUnit.TransportUnitID)
                             <br />
                             <small class="text-muted">Unit ID: @Html.DisplayFor(modelItem => item.TransportUnitID)</small>
+                        </td>
+                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InvoiceID) 
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.TotalAmount)

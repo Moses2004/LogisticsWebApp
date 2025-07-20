@@ -1,4 +1,5 @@
 ﻿// Models/FeedBack.cs
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,6 +14,7 @@ namespace LogisticsWebApp.Models // Adjust this namespace
         [Required]
         public int InvoiceID { get; set; }
         [ForeignKey("InvoiceID")]
+        [ValidateNever]
         public Invoice Invoice { get; set; } // 
 
         [Required]
